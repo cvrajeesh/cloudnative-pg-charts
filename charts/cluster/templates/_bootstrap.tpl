@@ -34,12 +34,14 @@ bootstrap:
     source: objectStoreRecoveryCluster
     {{- end }}
 
+{{- if eq .Values.recovery.method "object_store" }}
 externalClusters:
   - name: objectStoreRecoveryCluster
     barmanObjectStore:
       serverName: {{ .Values.recovery.serverName }}
       {{- $d := dict "chartFullname" (include "cluster.fullname" .) "scope" .Values.recovery "secretSuffix" "-recovery" -}}
       {{- include "cluster.barmanObjectStoreConfig" $d | nindent 4 }}
+{{- end }}
 {{-  else }}
   {{ fail "Invalid cluster mode!" }}
 {{- end }}
